@@ -1,10 +1,11 @@
 'use client';
 
 import { getProduct } from '@/lib/actions';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export default function Home() {
-  const { data, mutate } = useMutation({ mutationFn: getProduct });
+  const { data: mutationData, mutate } = useMutation({ mutationFn: getProduct });
+  const { data: queryData } = useQuery({ queryKey: ['products'], queryFn: () => getProduct() });
 
   return (
     <main className='flex flex-col max-w-5xl mx-auto my-12'>
@@ -12,7 +13,8 @@ export default function Home() {
         Get products
       </button>
       <div className='overflow-auto'>
-        <pre className='pt-12'>{JSON.stringify(data, null, 2)}</pre>
+        <pre className='pt-12'>{JSON.stringify(queryData, null, 2)}</pre>
+        <pre className='pt-12'>{JSON.stringify(mutationData, null, 2)}</pre>
       </div>
     </main>
   );
